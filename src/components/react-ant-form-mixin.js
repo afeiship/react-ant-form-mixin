@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { Alert, Form, Input } from 'antd';
 
+
 export default class {
 
   get formData() {
@@ -11,8 +12,10 @@ export default class {
     const { formData } = this.state;
 
     return inFields.map((item, index) => {
-      const { field, label, required, tips, disabled, hidden } = item;
+      const { field, label, required, tips, disabled, formatter, hidden } = item;
       const Component = item.component || Input;
+      const filedValue = formData[field];
+      const value = formatter ? formatter(filedValue) : filedValue;
 
       return (
         !hidden && (
@@ -26,7 +29,7 @@ export default class {
             {tips && <Alert message={tips} className={'mb10'} showIcon type="info" />}
             {
               <Component
-                value={formData[field]}
+                value={value}
                 onChange={this.onChangeToState.bind(this, `formData.${field}`)}
                 {...item.props}
               />
